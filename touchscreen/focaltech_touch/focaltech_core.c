@@ -2851,6 +2851,15 @@ static int fts_ts_probe_delayed(struct fts_ts_data *fts_data)
 		goto err_get_ic;
 	}
 
+#ifdef CONFIG_MACH_XIAOMI_MIDO
+	/*
+	 * Set charger-dispatch selector for Xiaomi mido/titanium only after
+	 * the FocalTech controller has been successfully identified over I2C,
+	 * mirroring the 4.9 ft5435 driver behaviour (controller-ID guarded).
+	 */
+	set_usb_charge_mode_par = 2;
+#endif
+
 #ifdef CONFIG_ARCH_QTI_VM
 tvm_setup:
 #endif
@@ -2984,10 +2993,6 @@ static int fts_ts_probe_entry(struct fts_ts_data *ts_data)
 	if (ret) {
 		FTS_ERROR("init glove/cover/charger fail");
 	}
-
-#ifdef CONFIG_MACH_XIAOMI_MIDO
-	set_usb_charge_mode_par = 2;
-#endif
 
 	ret = fts_gesture_init(ts_data);
 	if (ret) {
