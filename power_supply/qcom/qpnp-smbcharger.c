@@ -5210,7 +5210,7 @@ static int rerun_apsd(struct smbchg_chip *chip)
 			 * as benign so the charger path continues with the
 			 * initially detected type rather than erroring out.
 			 */
-			pr_warn_ratelimited("SMBCHG: src_det stuck high during APSD rerun (SDP/PC), skipping\n");
+			pr_warn_ratelimited("SMBCHG: src_det stuck high during APSD rerun (SDP/PC), continuing with detected type\n");
 			rc = 0;
 #else
 			pr_err("wait for src detect failed rc = %d\n", rc);
