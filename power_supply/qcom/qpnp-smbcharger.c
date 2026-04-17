@@ -5202,7 +5202,19 @@ static int rerun_apsd(struct smbchg_chip *chip)
 		pr_smb(PR_MISC, "Waiting on falling src det\n");
 		rc = wait_for_src_detect(chip, false);
 		if (rc < 0) {
+#ifdef CONFIG_MACH_XIAOMI_MIDO
+			/*
+			 * On Xiaomi mido (SCHG Lite / PMI8950), PC/SDP
+			 * connections hold src_detect high throughout the
+			 * APSD rerun sequence. Treat this stuck-high condition
+			 * as benign so the charger path continues with the
+			 * initially detected type rather than erroring out.
+			 */
+			pr_warn_ratelimited("SMBCHG: src_det stuck high during APSD rerun (SDP/PC), skipping\n");
+			rc = 0;
+#else
 			pr_err("wait for src detect failed rc = %d\n", rc);
+#endif
 			goto out;
 		}
 
