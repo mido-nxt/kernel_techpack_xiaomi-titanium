@@ -2985,10 +2985,6 @@ static int fts_ts_probe_entry(struct fts_ts_data *ts_data)
 		FTS_ERROR("init glove/cover/charger fail");
 	}
 
-#ifdef CONFIG_MACH_XIAOMI_MIDO
-	set_usb_charge_mode_par = 2;
-#endif
-
 	ret = fts_gesture_init(ts_data);
 	if (ret) {
 		FTS_ERROR("init gesture fail");
