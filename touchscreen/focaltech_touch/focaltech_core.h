@@ -389,10 +389,4 @@ void fts_ts_trusted_touch_tvm_i2c_failure_report(struct fts_ts_data *fts_data);
 #endif
 #endif
 extern bool gesture_incall;
-
-#ifdef CONFIG_MACH_XIAOMI_MIDO
-extern int set_usb_charge_mode_par;
-void tpd_usb_plugin(bool mode);
-#endif
-
 #endif /* __LINUX_FOCALTECH_CORE_H__ */

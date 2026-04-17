@@ -2985,10 +2985,6 @@ static int fts_ts_probe_entry(struct fts_ts_data *ts_data)
 		FTS_ERROR("init glove/cover/charger fail");
 	}
 
-#ifdef CONFIG_MACH_XIAOMI_MIDO
-	set_usb_charge_mode_par = 2;
-#endif
-
 	ret = fts_gesture_init(ts_data);
 	if (ret) {
 		FTS_ERROR("init gesture fail");
@@ -3598,36 +3594,6 @@ static void __exit fts_ts_exit(void)
 
 module_init(fts_ts_init);
 module_exit(fts_ts_exit);
-
-#ifdef CONFIG_MACH_XIAOMI_MIDO
-void tpd_usb_plugin(bool mode)
-{
-	int ret;
-	struct fts_ts_data *ts = fts_data;
-
-	if (!ts || !ts->input_dev) {
-		FTS_ERROR("fts_data or input_dev is NULL, skip charger mode");
-		return;
-	}
-
-	mutex_lock(&ts->transition_lock);
-
-	if (ts->suspended) {
-		FTS_DEBUG("suspended, skip charger mode update");
-		mutex_unlock(&ts->transition_lock);
-		return;
-	}
-
-	ret = fts_write_reg(FTS_REG_CHARGER_MODE_EN, mode ? 1 : 0);
-	if (ret < 0)
-		FTS_ERROR("failed to set charger mode=%d, ret=%d", mode, ret);
-	else
-		ts->charger_mode = mode ? ENABLE : DISABLE;
-
-	mutex_unlock(&ts->transition_lock);
-}
-EXPORT_SYMBOL(tpd_usb_plugin);
-#endif /* CONFIG_MACH_XIAOMI_MIDO */
 
 MODULE_AUTHOR("FocalTech Driver Team");
 MODULE_DESCRIPTION("FocalTech Touchscreen Driver");
